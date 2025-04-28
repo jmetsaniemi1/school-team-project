@@ -211,80 +211,80 @@
     <br>
     <p>Unohditko salasanasi? <a href="#" id="open-password-recovery">Napsauta tästä</a> uuden salasanan hankkimiseksi.</p>
 
-    <dialog id="sign-in-dialog" class="modal" style="background-color: rgba(51, 51, 51, 0.95) !important;">
-        <div class="modal-content" style="background-color: rgba(51, 51, 51, 0.95) !important; color: white !important;">
-            <div class="modal-header" style="background-color: rgba(51, 51, 51, 0.95) !important;">
-                <h4 style="color: white !important;">Rekisteröidy</h4>
+    <div id="sign-in-dialog" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Rekisteröidy</h4>
                 <a href="#" class="modal-close waves-effect waves-light btn-flat right">
-                    <i class="material-icons" style="color: white !important;">close</i>
+                    <i class="material-icons">close</i>
                 </a>
             </div>
             <div class="modal-body">
                 <form id="register-form">
                     <div class="input-field">
-                        <i class="material-icons prefix" style="color: white !important;">email</i>
-                        <input type="email" id="email" name="email" required style="color: white !important; border-bottom: 1px solid white !important;">
-                        <label for="email" style="color: white !important;">Sähköposti</label>
+                        <i class="material-icons prefix">email</i>
+                        <input type="email" id="email" name="email" required>
+                        <label for="email">Sähköposti</label>
                     </div>
                     <div class="input-field">
-                        <i class="material-icons prefix" style="color: white !important;">account_circle</i>
-                        <input type="text" id="new-username" name="new-username" required style="color: white !important; border-bottom: 1px solid white !important;">
-                        <label for="new-username" style="color: white !important;">Käyttäjätunnus</label>
+                        <i class="material-icons prefix">account_circle</i>
+                        <input type="text" id="new-username" name="new-username" required>
+                        <label for="new-username">Käyttäjätunnus</label>
                     </div>
                     <div class="input-field">
-                        <i class="material-icons prefix" style="color: white !important;">lock</i>
-                        <input type="password" id="new-password" name="new-password" required style="color: white !important; border-bottom: 1px solid white !important;">
-                        <label for="new-password" style="color: white !important;">Salasana</label>
+                        <i class="material-icons prefix">lock</i>
+                        <input type="password" id="new-password" name="new-password" required>
+                        <label for="new-password">Salasana</label>
                     </div>
                     <div class="input-field">
-                        <i class="material-icons prefix" style="color: white !important;">lock_outline</i>
-                        <input type="password" id="confirm-password" name="confirm-password" required style="color: white !important; border-bottom: 1px solid white !important;">
-                        <label for="confirm-password" style="color: white !important;">Vahvista salasana</label>
+                        <i class="material-icons prefix">lock_outline</i>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                        <label for="confirm-password">Vahvista salasana</label>
                     </div>
                     
-                    <div class="modal-footer" style="background-color: rgba(51, 51, 51, 0.95) !important;">
+                    <div class="modal-footer">
                         <button class="btn waves-effect waves-light" type="submit">
                             Rekisteröidy
                             <i class="material-icons right">person_add</i>
                         </button>
-                        <button class="btn-flat waves-effect waves-light modal-close" type="button" style="color: white !important;">
+                        <button class="btn-flat waves-effect waves-light modal-close" type="button">
                             Peruuta
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-    </dialog>
+    </div>
 
-    <dialog id="password-recovery-dialog" class="modal" style="background-color: rgba(51, 51, 51, 0.95) !important;">
-        <div class="modal-content" style="background-color: rgba(51, 51, 51, 0.95) !important; color: white !important;">
-            <div class="modal-header" style="background-color: rgba(51, 51, 51, 0.95) !important;">
-                <h4 style="color: white !important;">Unohtunut salasana</h4>
+    <div id="password-recovery-dialog" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Unohtunut salasana</h4>
                 <a href="#" class="modal-close waves-effect waves-light btn-flat right">
-                    <i class="material-icons" style="color: white !important;">close</i>
+                    <i class="material-icons">close</i>
                 </a>
             </div>
             <div class="modal-body">
-                <p class="flow-text" style="color: white !important;">Syötä sähköpostiosoitteesi, niin lähetämme sinulle uuden salasanan. Suosittelemme vaihtamaan sen uuteen, kun kirjaudut sisään.</p>
+                <p class="flow-text">Syötä sähköpostiosoitteesi, niin lähetämme sinulle uuden salasanan. Suosittelemme vaihtamaan sen uuteen, kun kirjaudut sisään.</p>
                 <form id="password-recovery-form">
                     <div class="input-field">
-                        <i class="material-icons prefix" style="color: white !important;">email</i>
-                        <input type="email" id="recovery-email" name="recovery-email" required style="color: white !important; border-bottom: 1px solid white !important;">
-                        <label for="recovery-email" style="color: white !important;">Sähköposti</label>
+                        <i class="material-icons prefix">email</i>
+                        <input type="email" id="recovery-email" name="recovery-email" required>
+                        <label for="recovery-email">Sähköposti</label>
                     </div>
-                    <div class="modal-footer" style="background-color: rgba(51, 51, 51, 0.95) !important;">
+                    <div class="modal-footer">
                         <button class="btn waves-effect waves-light" type="submit">
                             Lähetä
                             <i class="material-icons right">send</i>
                         </button>
-                        <button class="btn-flat waves-effect waves-light modal-close" type="button" style="color: white !important;">
+                        <button class="btn-flat waves-effect waves-light modal-close" type="button">
                             Peruuta
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-    </dialog>
+    </div>
     </main>
 
 

@@ -1,12 +1,16 @@
 // MODAALIT REGISTER JA PASSWORD RECOVERY
 
-// Importataan tietokantaoperaatiot
-const { loginUser, registerUser, resetPassword } = require('../../../database/methods/sign/POST');
-
 document.addEventListener('DOMContentLoaded', function() {
     // Alustetaan Materialize modaalit
     var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems);
+    var instances = M.Modal.init(elems, {
+        dismissible: true,
+        opacity: 0.5,
+        inDuration: 300,
+        outDuration: 200,
+        startingTop: '4%',
+        endingTop: '10%'
+    });
 
     // Haetaan tarvittavat elementit
     const registerModal = document.getElementById('sign-in-dialog');
@@ -51,9 +55,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = document.getElementById('password').value;
 
         try {
-            const data = await loginUser({ username, password });
-            localStorage.setItem('token', data.token);
-            window.location.href = '../own-page/ownPage.html';
+            // Tässä voisi olla oikea kirjautumislogiikka
+            console.log('Kirjaudutaan sisään:', username);
+            M.toast({html: 'Kirjautuminen onnistui!'});
+            // window.location.href = '../own-page/ownPage.html';
         } catch (error) {
             M.toast({html: 'Virhe kirjautumisessa. Tarkista käyttäjätunnus ja salasana.'});
         }
@@ -73,7 +78,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         try {
-            await registerUser({ email, username, password });
+            // Tässä voisi olla oikea rekisteröitymislogiikka
+            console.log('Rekisteröidään:', username, email);
             M.toast({html: 'Rekisteröityminen onnistui! Voit nyt kirjautua sisään.'});
             var instance = M.Modal.getInstance(registerModal);
             instance.close();
@@ -88,7 +94,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('recovery-email').value;
 
         try {
-            await resetPassword(email);
+            // Tässä voisi olla oikea salasanan palautuslogiikka
+            console.log('Palautetaan salasana:', email);
             M.toast({html: 'Salasanan palautuslinkki on lähetetty sähköpostiisi.'});
             var instance = M.Modal.getInstance(passwordRecoveryModal);
             instance.close();

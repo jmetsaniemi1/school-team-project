@@ -11,6 +11,60 @@
     z-index: -1;
 }
 
+/* Modaalin muotoilut */
+.modal {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+}
+
+.modal-content {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+    color: white !important;
+}
+
+.modal-header {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+}
+
+.modal-header h4 {
+    color: white !important;
+}
+
+.modal-body {
+    color: white !important;
+}
+
+.modal-footer {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+}
+
+/* Input-kenttien muotoilut */
+.input-field input {
+    color: white !important;
+    border-bottom: 1px solid white !important;
+}
+
+.input-field label {
+    color: white !important;
+}
+
+.input-field .prefix {
+    color: white !important;
+}
+
+/* Nappien muotoilut */
+.modal .btn {
+    background-color: white !important;
+    color: black !important;
+}
+
+.modal .btn-flat {
+    color: white !important;
+}
+
+.modal .btn i {
+    color: black !important;
+}
+
 @media screen and (min-width: 850px) {
     .earth-image {
         max-width: 600px;
