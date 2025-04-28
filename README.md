@@ -27,7 +27,8 @@
     - [2024-12-18](#2024-12-18)
     - [2025-01-08](#2025-01-08)
     - [2025-01-17](#2025-01-17)
-    - [2025-05-05](#2025-05-05)
+    - [2025-04-05](#2025-04-05)
+    - [2025-04-28](#2025-04-28)
     - [Global.css](#globalcss)
 
 ## Version Info
@@ -171,6 +172,10 @@ Projekti käyttää seuraavaa tietokantapohjaista rakennetta backendissä:
   - `DELETE.js`: Poistaa dokumentteja (esim. `findByIdAndDelete`)
   - `GET.js`: Hakee tietokannasta dataa (esim. `find`)
   - `POST.js`: Luo uusia dokumentteja (esim. `create`)
+  - /ownPage
+    - Löytyy samat PUT, DELETE, GET ja POST -operaatiot. OwnPage-kansion operaatiot käsittelevät vain ownPage-sivun ja admin-sivun spesifisiä toimintoja. Esim. käyttäjän omien tietojen muokkaus, avatarin vaihto jne. Jako auttaa koodin organisoinnissa ja ylläpidettävyydessä.
+
+
 
 - `models/` – Määrittelee MongoDB-skeemat Mongoosea käyttäen:
   - `contactForm.js`: Lomakedatan skeema (esim. yhteydenottolomake)
@@ -198,6 +203,9 @@ Projekti käyttää seuraavaa tietokantapohjaista rakennetta backendissä:
 - Parannettu interaktiivisuus ja animaatiot frontendissä.
 - Dynaaminen API-tietojen haku backendistä frontendille.
 - Lisää validointeja ja virheenkäsittelyä CRUD-operaatioihin.
+- Jos käyttäjä kirjautuu admin-tunnuksilla, hän ohjautuu admin.html -sivulle. Admin sivuilla ylläpitäjä voi nähdä kirjautuneet käyttäjät viimeisen 24 tunnin ajalta JWT-tokeneiden perusteella. Admin voi poistaa käyttäjiä suoraan tietokannasta, antaa bannit, tarkastella käyttäjien tietoja suoraan selainsivulla. Tulevaisuuden ominaisuuksia: Admin voi lähettää suoraan viestiä, muokata planeettojen tietoja, tehdä muita muutoksia sivuille.
+
+
 
 ---
 
@@ -212,7 +220,7 @@ Projekti käyttää seuraavaa tietokantapohjaista rakennetta backendissä:
 
 ---
 
-### **Ylläpitäjät ja kontribuutiot**
+### **Ylläpitäjät**
 
 - [![Kharmaa](https://img.shields.io/github/followers/Kharmaa.svg?style=social&label=Kharmaa)](https://github.com/Kharmaa)
 - [![jmetsaniemi1](https://img.shields.io/github/followers/jmetsaniemi1.svg?style=social&label=jmetsaniemi1)](https://github.com/jmetsaniemi1)
@@ -355,7 +363,7 @@ Lisäykset tulee julkaista aina **feature/nimi**-branchiin.
 - Etusivun ulkoasua parannettu.
 - Uusia custom CSS-arvoja otettu käyttöön.
 
-### 2025-05-05
+### 2025-04-05
 
 **Tietokanta tiedostorakenne, yhdistys MongoDB ja testaus Postmanilla:**
 
@@ -369,6 +377,41 @@ Lisäykset tulee julkaista aina **feature/nimi**-branchiin.
 - routes/users.js aloitettu
 - models/user.js aloitettu
 - Ohjeet luotu README.md -tiedostoon.
+
+---
+
+### 2025-04-28
+
+**Tietokanta tiedostorakenne päivitys, omat sivut, salasana hashaus, brypt ja testaus Postmanilla:**
+
+- Token-autentikointi toteutus:
+  - Lisätty JWT-tokenin luonti kirjautumisen yhteydessä.
+  - Lisätty tokenin tallennus localStorageen
+  - Lisätty tokenin tarkistus palvelunpuolella
+
+- Käyttäjän tietojen hallinta:
+  - Lisätty käyttäjän tietojen haku tokenin avulla
+  - Lisätty käyttäjän tietojen päivitys
+  - Lisätty käyttäjän poisto
+
+- Salasanan hallinta:
+  - Lisätty salasanan hashaus bcrypt-kirjastolla
+  - Korjattu salasanan vertailu
+  - Lisätty salasanan vaihto
+
+- Käyttöliittymän päivitykset:
+  - Lisätty profiilitietojen näyttäminen
+  - Lisätty modaalit käyttäjän tietojen muokkaamiseen
+  - Lisätty varmistusviestit toiminnoille
+
+- Tietoturvapäivitykset:
+  - Lisätty salasanojen hashaus
+  - Lisätty token-pohjainen autentikointi
+  - Lisätty tietojen validointi
+
+- Käyttäjäkokemus:
+  - Lisätty onnistuneiden operaatioiden vahvistukset palvelimen terminaalissa ja selaimen dev-toolsissa
+  - Pari virheilmoitusta lisätty
 
 ---
 
