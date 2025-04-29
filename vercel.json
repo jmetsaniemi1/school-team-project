@@ -24,16 +24,27 @@
     ],
     "routes": [
         {
-            "src": "/api/(.*)",
-            "dest": "index.js"
+            "handle": "filesystem"
         },
         {
-            "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|json|html))",
-            "dest": "/$1"
+            "src": "/api/(.*)",
+            "dest": "/index.js"
+        },
+        {
+            "src": "/pages/(.*)",
+            "dest": "/pages/$1"
+        },
+        {
+            "src": "/resources/(.*)",
+            "dest": "/resources/$1"
+        },
+        {
+            "src": "/global/(.*)",
+            "dest": "/global/$1"
         },
         {
             "src": "/(.*)",
-            "dest": "index.js"
+            "dest": "/index.js"
         }
     ]
 } 
