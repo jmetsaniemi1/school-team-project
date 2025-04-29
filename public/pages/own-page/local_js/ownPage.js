@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // API endpoints
     const API_BASE_URL = '/api';
     const ENDPOINTS = {
-        CURRENT_USER: `${API_BASE_URL}/users/current`,
+        CURRENT_USER: `${API_BASE_URL}/users/profile`,
         UPDATE_USER: `${API_BASE_URL}/users/update`,
         DELETE_USER: `${API_BASE_URL}/users/delete`,
         LAST_VISITS: `${API_BASE_URL}/users/visits`

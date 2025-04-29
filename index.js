@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./db');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
@@ -42,6 +43,7 @@ app.use(async (req, res, next) => {
 
 // API-reitit
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 // Testireitti
 app.get('/test', (req, res) => {
