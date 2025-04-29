@@ -3,23 +3,19 @@ require('dotenv').config();
 
 const connectDB = async () => {
   const mongoURI = process.env.MONGO_URI;
-
   if (!mongoURI) {
-    console.error('[Vercel] MONGO_URI environment variable not set!');
-    process.exit(1);
+    throw new Error('MONGO_URI environment variable not set');
   }
-
   try {
-    await mongoose.connect(mongoURI, {
-      serverSelectionTimeoutMS: 5000
-    });
-    console.log('MongoDB connected');
+    await mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 5000 });
+    console.log('[Vercel] MongoDB connected');
   } catch (err) {
-    console.error('[Vercel] Error connecting to MongoDB:', err.message);
-    process.exit(1);
+    console.error('[Vercel] Error connecting to MongoDB:', err);
+    throw err;
   }
 };
 
 module.exports = connectDB;
+
 
 

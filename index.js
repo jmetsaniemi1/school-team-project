@@ -6,44 +6,38 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
+let dbConnected = false;
 
-// CORS-asetukset
-const corsOptions = {
-  origin: [
-    'https://school-team-project.vercel.app'
-  ],
-  optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
+// CORS, JSON, staattiset jne.
+app.use(cors({ origin: ['https://school-team-project.vercel.app'] }));
 app.use(express.json());
-
-// Staattiset tiedostot
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'pages')));
 app.use(express.static(path.join(__dirname, 'resources')));
 app.use(express.static(path.join(__dirname, 'global')));
 
-// Yhdistetään tietokantaan
-connectDB()
-  .then(() => {
-    console.log('[Vercel] MongoDB yhteys onnistui');
-  })
-  .catch((err) => {
-    console.error('[Vercel] MongoDB yhteysvirhe:', err);
-    process.exit(1);
-  });
+// Tämä middleware takaa, että connectDB() ajetaan vain kerran ja virheet menevät Expressin error-handleriin
+app.use(async (req, res, next) => {
+  if (!dbConnected) {
+    try {
+      await connectDB();
+      dbConnected = true;
+    } catch (err) {
+      return next(err);
+    }
+  }
+  next();
+});
 
 // API-reitit
 app.use('/api/auth', authRoutes);
 
-// Testireitti
+// Testi
 app.get('/test', (req, res) => {
-  console.log('Testireitti kutsuttu!');
   res.send('Testi toimii!');
 });
 
-// Kaikki muut GET-pyynnöt ohjataan index.html:ään
+// Front-endin index.html
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'index.html'));
 });
@@ -51,9 +45,9 @@ app.get('*', (req, res) => {
 // Virheenkäsittely
 app.use((err, req, res, next) => {
   console.error('[Vercel] Virhe:', err.stack);
-  res.status(500).json({ message: 'Jotain meni pieleen!' });
+  res.status(500).json({ message: err.message || 'Jotain meni pieleen!' });
 });
 
-
+// Exportataan app Vercelille (EI app.listen)
 module.exports = app;
 
