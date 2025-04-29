@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const createUser = async (req, res) => {
   try {
+    console.log('[Vercel] Creating new user:', { email: req.body.email, username: req.body.username });
     const {
       user_id,
       username,
@@ -44,12 +45,12 @@ const createUser = async (req, res) => {
 
     // Save the new user to the database
     const savedUser = await newUser.save();
-    console.log("Added user:", savedUser);
+    console.log('[Vercel] User created successfully:', { id: savedUser._id, email: savedUser.email });
 
     // Respond with a 201 Created status and the saved user data
     res.status(201).json(savedUser);
   } catch (err) {
-    console.error("Error adding user:", err);
+    console.error('[Vercel] Error creating user:', { error: err.message, stack: err.stack });
     // Respond with a 500 Internal Server Error status and the error message
     res.status(500).json({
       error: "Failed to create user",
@@ -60,6 +61,7 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
+    console.log('[Vercel] Login attempt:', { email: req.body.email });
     const { email, password } = req.body;
 
     // Etsi käyttäjä sähköpostilla
@@ -85,6 +87,7 @@ const loginUser = async (req, res) => {
     user.last_login = new Date();
     await user.save();
 
+    console.log('[Vercel] Login successful:', { userId: user._id, email: user.email });
     res.json({
       token,
       user: {
@@ -95,7 +98,7 @@ const loginUser = async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('Kirjautumisvirhe:', err);
+    console.error('[Vercel] Login error:', { error: err.message, stack: err.stack });
     res.status(500).json({ error: 'Kirjautuminen epäonnistui' });
   }
 };
