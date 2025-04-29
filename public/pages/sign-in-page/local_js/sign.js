@@ -59,25 +59,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Kirjaudu sisään
     signInForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const email = document.getElementById('username').value; // Käytetään email-kenttää käyttäjätunnuksena
+        const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
         try {
-            console.log('Yritetään kirjautua:', email);
+            console.log('Yritetään kirjautua:', username);
             const response = await fetch(ENDPOINTS.LOGIN, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ 
+                    email: username, // Käytetään username-kenttää email-kenttänä
+                    password 
+                })
             });
 
+            const data = await response.json();
+            
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Kirjautuminen epäonnistui');
+                throw new Error(data.error || 'Kirjautuminen epäonnistui');
             }
 
-            const data = await response.json();
             console.log('Kirjautuminen onnistui:', data);
             
             // Tallenna token
@@ -92,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 1000);
         } catch (error) {
             console.error('Kirjautumisvirhe:', error);
-            M.toast({html: error.message || 'Virhe kirjautumisessa. Tarkista käyttäjätunnus ja salasana.', classes: 'red'});
+            M.toast({html: error.message || 'Virhe kirjautumisessa. Tarkista sähköposti ja salasana.', classes: 'red'});
         }
     });
 
