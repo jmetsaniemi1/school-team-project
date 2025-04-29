@@ -29,14 +29,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const deleteProfileModalInstance = M.Modal.init(deleteProfileModal);
 
     // Alusta dropdown-valikot
-    document.addEventListener('DOMContentLoaded', function() {
-        const dropdowns = document.querySelectorAll('.dropdown-trigger');
+    const dropdowns = document.querySelectorAll('.dropdown-trigger');
+    if (dropdowns.length > 0) {
         M.Dropdown.init(dropdowns, {
             constrainWidth: false,
             coverTrigger: false,
             hover: true
         });
-    });
+    }
 
     // API endpoints
     const API_BASE_URL = '/api';
@@ -152,10 +152,27 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             if (!response.ok) {
+                if (response.status === 401) {
+                    console.error('Käyttäjän autentikointi epäonnistui');
+                    localStorage.removeItem('token');
+                    window.location.href = '../../sign-in-page/sign.html';
+                    return;
+                }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            const userData = await response.json();
+            let userData;
+            try {
+                userData = await response.json();
+            } catch (parseError) {
+                console.error('Virhe vastauksen käsittelyssä:', parseError);
+                throw new Error('Palvelimen vastaus ei ole kelvollinen JSON-muoto');
+            }
+
+            if (!userData || typeof userData !== 'object') {
+                throw new Error('Virheellinen vastausmuoto palvelimelta');
+            }
+
             console.log('Käyttäjän tiedot haettu:', userData);
             currentUser = userData;
             updateUserInterface(userData);
@@ -166,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return userData;
         } catch (error) {
             console.error('Virhe käyttäjän tietojen haussa:', error);
-            M.toast({html: 'Virhe käyttäjän tietojen haussa', classes: 'red'});
+            M.toast({html: 'Virhe käyttäjän tietojen haussa: ' + error.message, classes: 'red'});
             if (error.message.includes('401')) {
                 localStorage.removeItem('token');
                 window.location.href = '../../sign-in-page/sign.html';
