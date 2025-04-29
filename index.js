@@ -16,15 +16,14 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 
-// Middleware
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Staattiset tiedostot - järjestys on tärkeä!
-app.use(express.static(path.join(__dirname)));
-app.use('/pages', express.static(path.join(__dirname, 'pages')));
-app.use('/resources', express.static(path.join(__dirname, 'resources')));
-app.use('/global', express.static(path.join(__dirname, 'global')));
+// Staattiset tiedostot
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'pages')));
+app.use(express.static(path.join(__dirname, 'resources')));
+app.use(express.static(path.join(__dirname, 'global')));
 
 // Yhdistetään tietokantaan
 connectDB()
@@ -36,29 +35,16 @@ connectDB()
     process.exit(1);
   });
 
-// API-reititykset
+// API-reitit
 app.use('/api/auth', authRoutes);
 
-// Tarkista onko pyyntö staattiselle tiedostolle
-app.use((req, res, next) => {
-  const staticExtensions = ['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.html'];
-  if (staticExtensions.some(ext => req.path.endsWith(ext))) {
-    console.log('[Vercel] Staattinen tiedosto pyydetty:', req.path);
-    // Jos tiedostoa ei löydy, jatka seuraavaan middlewareen
-    const filePath = path.join(__dirname, req.path);
-    if (require('fs').existsSync(filePath)) {
-      return res.sendFile(filePath);
-    }
-  }
-  next();
+// Testireitti (voit poistaa tämän myöhemmin)
+app.get('/test', (req, res) => {
+  res.send('Testi toimii!');
 });
 
 // Kaikki muut GET-pyynnöt ohjataan index.html:ään
 app.get('*', (req, res) => {
-  console.log('[Vercel] Pyyntö:', req.path);
-  if (req.path.startsWith('/api')) {
-    return res.status(404).json({ message: 'API-polkua ei löydy' });
-  }
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
@@ -71,6 +57,6 @@ app.use((err, req, res, next) => {
 // Käynnistetään palvelin
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`[Vercel] Palvelin käynnissä portissa ${PORT}`);
+  console.log(`[Vercel] Palvelin käynnissä portissa ${PORT}`);
 });
 
