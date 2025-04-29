@@ -143,13 +143,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            console.log('Lähetetään pyyntö:', ENDPOINTS.CURRENT_USER);
             const response = await fetch(ENDPOINTS.CURRENT_USER, {
                 method: 'GET',
                 headers: {
+                    'Accept': 'application/json',
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
                 credentials: 'include'
+            });
+
+            console.log('Vastaus saatu:', {
+                status: response.status,
+                statusText: response.statusText,
+                headers: Object.fromEntries(response.headers.entries())
             });
 
             if (!response.ok) {
@@ -159,24 +167,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = '../../sign-in-page/sign.html';
                     return;
                 }
-                const errorData = await response.json();
-                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                } else {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
             }
 
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
+                console.error('Virheellinen content-type:', contentType);
                 throw new Error('Palvelimen vastaus ei ole JSON-muodossa');
             }
 
             let userData;
+            const responseText = await response.text();
+            console.log('Palvelimen vastaus:', responseText);
+
             try {
-                userData = await response.json();
+                userData = JSON.parse(responseText);
             } catch (parseError) {
-                console.error('Virhe vastauksen käsittelyssä:', parseError);
+                console.error('JSON-parsinnan virhe:', parseError);
                 throw new Error('Palvelimen vastaus ei ole kelvollinen JSON-muoto');
             }
 
             if (!userData || typeof userData !== 'object') {
+                console.error('Virheellinen vastausmuoto:', userData);
                 throw new Error('Virheellinen vastausmuoto palvelimelta');
             }
 
