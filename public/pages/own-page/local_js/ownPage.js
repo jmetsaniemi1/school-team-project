@@ -148,7 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                credentials: 'include'
             });
 
             if (!response.ok) {
@@ -158,7 +159,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = '../../sign-in-page/sign.html';
                     return;
                 }
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+            }
+
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                throw new Error('Palvelimen vastaus ei ole JSON-muodossa');
             }
 
             let userData;
