@@ -39,9 +39,11 @@ connectDB()
 app.use('/api/auth', authRoutes);
 
 // Testireitti (voit poistaa tämän myöhemmin)
-app.get('/test', (req, res) => {
-  res.send('Testi toimii!');
-});
+console.log('Sovellus käynnistyy!');
+   app.get('/test', (req, res) => {
+     console.log('Testireitti kutsuttu!');
+     res.send('Testi toimii!');
+   });
 
 // Kaikki muut GET-pyynnöt ohjataan index.html:ään
 app.get('*', (req, res) => {
