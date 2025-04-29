@@ -14,9 +14,7 @@ const connectDB = async () => {
   try {
     console.log('[Vercel Debug] Yhdistetään osoitteeseen:', mongoURI.replace(/mongodb\+srv:\/\/([^:]+):([^@]+)@/, 'mongodb+srv://***:***@'));
     const conn = await mongoose.connect(mongoURI, { 
-      serverSelectionTimeoutMS: 5000,
-      useNewUrlParser: true,
-      useUnifiedTopology: true
+      serverSelectionTimeoutMS: 5000
     });
     
     console.log('[Vercel Debug] MongoDB yhteys onnistui!');
