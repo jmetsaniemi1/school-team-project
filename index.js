@@ -21,7 +21,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Staattiset tiedostot - järjestys on tärkeä!
-app.use('/', express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname)));
 app.use('/pages', express.static(path.join(__dirname, 'pages')));
 app.use('/resources', express.static(path.join(__dirname, 'resources')));
 app.use('/global', express.static(path.join(__dirname, 'global')));
@@ -39,8 +39,23 @@ connectDB()
 // API-reititykset
 app.use('/api/auth', authRoutes);
 
+// Tarkista onko pyyntö staattiselle tiedostolle
+app.use((req, res, next) => {
+  const staticExtensions = ['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.ico', '.html'];
+  if (staticExtensions.some(ext => req.path.endsWith(ext))) {
+    console.log('[Vercel] Staattinen tiedosto pyydetty:', req.path);
+    // Jos tiedostoa ei löydy, jatka seuraavaan middlewareen
+    const filePath = path.join(__dirname, req.path);
+    if (require('fs').existsSync(filePath)) {
+      return res.sendFile(filePath);
+    }
+  }
+  next();
+});
+
 // Kaikki muut GET-pyynnöt ohjataan index.html:ään
 app.get('*', (req, res) => {
+  console.log('[Vercel] Pyyntö:', req.path);
   if (req.path.startsWith('/api')) {
     return res.status(404).json({ message: 'API-polkua ei löydy' });
   }
