@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Poista token ja ohjaa kirjautumissivulle
             localStorage.removeItem('token');
             setTimeout(() => {
-                window.location.href = '../sign.html';
+                window.location.href = '/public/index.html';
             }, 2000);
         } catch (error) {
             M.toast({html: 'Virhe profiilin poistossa'});
@@ -288,7 +288,7 @@ const deleteProfile = async () => {
         }
 
         localStorage.removeItem('token');
-        window.location.href = '/index.html';
+        window.location.href = '/public/index.html';
     } catch (error) {
         console.error('Virhe profiilin poistossa:', error);
         M.toast({html: 'Virhe profiilin poistossa', classes: 'red'});

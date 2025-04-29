@@ -20,9 +20,6 @@ app.use(cors({
 // JSON-bodyt ja staattiset hakemistot
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'pages')));
-app.use(express.static(path.join(__dirname, 'resources')));
-app.use(express.static(path.join(__dirname, 'global')));
 
 // Yhdistä MongoDB: vain kerran per cold start
 app.use(async (req, res, next) => {
@@ -46,9 +43,9 @@ app.get('/test', (req, res) => {
   res.send('Testi toimii!');
 });
 
-// Catch-all (kaaosta välttävä regex, ei ‘*’ string)
+// Catch-all (kaaosta välttävä regex, ei 'string)
 app.get(/.*/, (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'index.html'));
+  res.sendFile(path.resolve(__dirname, 'public/index.html'));
 });
 
 // Express‐error handler
