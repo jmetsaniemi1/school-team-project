@@ -7,23 +7,34 @@ const User = require('../models/user');
 // Kirjautuminen
 router.post('/login', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        console.log('[Auth Debug] Login attempt:', req.body);
+        const { email, password } = req.body;
         
-        // Etsitään käyttäjä
-        const user = await User.findOne({ username });
+        if (!email || !password) {
+            console.log('[Auth Debug] Missing email or password');
+            return res.status(400).json({ message: 'Sähköposti ja salasana vaaditaan' });
+        }
+        
+        // Etsitään käyttäjä sähköpostilla
+        console.log('[Auth Debug] Searching user with email:', email);
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(401).json({ message: 'Virheellinen käyttäjätunnus tai salasana' });
+            console.log('[Auth Debug] User not found');
+            return res.status(401).json({ message: 'Virheellinen sähköposti tai salasana' });
         }
 
         // Tarkistetaan salasana
+        console.log('[Auth Debug] Checking password');
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-            return res.status(401).json({ message: 'Virheellinen käyttäjätunnus tai salasana' });
+            console.log('[Auth Debug] Invalid password');
+            return res.status(401).json({ message: 'Virheellinen sähköposti tai salasana' });
         }
 
         // Luodaan JWT token
+        console.log('[Auth Debug] Creating JWT token');
         const token = jwt.sign(
-            { userId: user._id, username: user.username },
+            { userId: user._id, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
@@ -32,9 +43,17 @@ router.post('/login', async (req, res) => {
         user.last_login = new Date();
         await user.save();
 
-        res.json({ token, username: user.username });
+        console.log('[Auth Debug] Login successful');
+        res.json({ 
+            token, 
+            user: {
+                id: user._id,
+                email: user.email,
+                username: user.username
+            }
+        });
     } catch (error) {
-        console.error('Kirjautumisvirhe:', error);
+        console.error('[Auth Debug] Login error:', error);
         res.status(500).json({ message: 'Palvelinvirhe' });
     }
 });
@@ -42,11 +61,18 @@ router.post('/login', async (req, res) => {
 // Rekisteröityminen
 router.post('/register', async (req, res) => {
     try {
+        console.log('[Auth Debug] Register attempt:', req.body);
         const { username, email, password } = req.body;
+
+        if (!email || !password || !username) {
+            console.log('[Auth Debug] Missing required fields');
+            return res.status(400).json({ message: 'Kaikki kentät ovat pakollisia' });
+        }
 
         // Tarkistetaan onko käyttäjätunnus tai sähköposti jo käytössä
         const existingUser = await User.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
+            console.log('[Auth Debug] User already exists');
             return res.status(400).json({ message: 'Käyttäjätunnus tai sähköposti on jo käytössä' });
         }
 
@@ -59,16 +85,31 @@ router.post('/register', async (req, res) => {
             username,
             email,
             password: hashedPassword,
+            registration_date: new Date(),
             verification_token: jwt.sign({ email }, process.env.JWT_SECRET)
         });
 
         await user.save();
+        console.log('[Auth Debug] User created successfully');
 
-        // Tässä voisi lähettää vahvistussähköpostin
+        // Luodaan token
+        const token = jwt.sign(
+            { userId: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
+        );
 
-        res.status(201).json({ message: 'Käyttäjä luotu onnistuneesti' });
+        res.status(201).json({ 
+            message: 'Käyttäjä luotu onnistuneesti',
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                username: user.username
+            }
+        });
     } catch (error) {
-        console.error('Rekisteröitymisvirhe:', error);
+        console.error('[Auth Debug] Registration error:', error);
         res.status(500).json({ message: 'Palvelinvirhe' });
     }
 });
