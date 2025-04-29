@@ -13,13 +13,26 @@ const connectDB = async () => {
 
   try {
     console.log('[Vercel Debug] Yhdistetään osoitteeseen:', mongoURI.replace(/mongodb\+srv:\/\/([^:]+):([^@]+)@/, 'mongodb+srv://***:***@'));
-    await mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 5000 });
+    const conn = await mongoose.connect(mongoURI, { 
+      serverSelectionTimeoutMS: 5000,
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    
     console.log('[Vercel Debug] MongoDB yhteys onnistui!');
+    console.log('[Vercel Debug] Yhteyden tila:', mongoose.connection.readyState);
     
-    // Testataan yhteyttä
-    const collections = await mongoose.connection.db.listCollections().toArray();
-    console.log('[Vercel Debug] Saatavilla olevat kokoelmat:', collections.map(c => c.name));
+    // Varmistetaan että yhteys on valmis
+    if (mongoose.connection.readyState === 1) {
+      try {
+        const dbName = mongoose.connection.db.databaseName;
+        console.log('[Vercel Debug] Yhdistetty tietokantaan:', dbName);
+      } catch (err) {
+        console.log('[Vercel Debug] Tietokannan nimen hakeminen epäonnistui:', err.message);
+      }
+    }
     
+    return conn;
   } catch (err) {
     console.error('[Vercel Debug] MongoDB yhteysvirhe:', err.message);
     console.error('[Vercel Debug] Täysi virhe:', err);
