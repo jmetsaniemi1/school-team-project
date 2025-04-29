@@ -2,11 +2,11 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     // API endpoints
-    const API_BASE_URL = '/api';
+    const API_BASE_URL = '/api/auth';
     const ENDPOINTS = {
-        LOGIN: `${API_BASE_URL}/auth/login`,
-        REGISTER: `${API_BASE_URL}/auth/register`,
-        RESET_PASSWORD: `${API_BASE_URL}/auth/reset-password`
+        LOGIN: `${API_BASE_URL}/login`,
+        REGISTER: `${API_BASE_URL}/register`,
+        RESET_PASSWORD: `${API_BASE_URL}/reset-password`
     };
 
     // Alustetaan Materialize modaalit
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
-                    email: username, // Käytetään username-kenttää email-kenttänä
+                    email: username,
                     password 
                 })
             });
@@ -126,13 +126,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
             });
 
+            const data = await response.json();
+            
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Rekisteröityminen epäonnistui');
+                throw new Error(data.error || 'Rekisteröityminen epäonnistui');
             }
 
-            const data = await response.json();
             console.log('Rekisteröityminen onnistui:', data);
+            
+            // Tallenna token jos se tulee rekisteröitymisen yhteydessä
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+            }
             
             // Näytä onnistumisviesti
             M.toast({html: 'Rekisteröityminen onnistui! Voit nyt kirjautua sisään.', classes: 'green'});
