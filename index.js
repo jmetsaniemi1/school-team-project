@@ -38,12 +38,11 @@ connectDB()
 // API-reitit
 app.use('/api/auth', authRoutes);
 
-// Testireitti (voit poistaa tämän myöhemmin)
-console.log('Sovellus käynnistyy!');
-   app.get('/test', (req, res) => {
-     console.log('Testireitti kutsuttu!');
-     res.send('Testi toimii!');
-   });
+// Testireitti
+app.get('/test', (req, res) => {
+  console.log('Testireitti kutsuttu!');
+  res.send('Testi toimii!');
+});
 
 // Kaikki muut GET-pyynnöt ohjataan index.html:ään
 app.get('*', (req, res) => {
@@ -56,9 +55,6 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Jotain meni pieleen!' });
 });
 
-// Käynnistetään palvelin
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`[Vercel] Palvelin käynnissä portissa ${PORT}`);
-});
+
+module.exports = app;
 
