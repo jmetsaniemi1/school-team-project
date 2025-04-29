@@ -10,7 +10,6 @@ const app = express();
 // CORS-asetukset
 const corsOptions = {
   origin: [
-    'http://localhost:3000',
     'https://school-team-project.vercel.app'
   ],
   optionsSuccessStatus: 200
