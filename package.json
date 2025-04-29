@@ -4,6 +4,7 @@
   "description": "- [Web Project README](#web-project-readme)   - [Version Info](#version-info)   - [Projektin tavoitteet](#projektin-tavoitteet)   - [Käytetyt teknologiat](#käytetyt-teknologiat)   - [Asennusohjeet](#asennusohjeet)   - [Käyttöohjeet](#käyttöohjeet)   - [Tulevat parannukset](#tulevat-parannukset)     - [**Ominaisuudet**](#ominaisuudet)     - [**Ylläpitäjät ja kontribuutiot**](#ylläpitäjät-ja-kontribuutiot)     - [**Kehitysympäristö**](#kehitysympäristö)     - [**Tiedossa olevat ongelmat**](#tiedossa-olevat-ongelmat)   - [Päivitysten julkaiseminen](#päivitysten-julkaiseminen)   - [Päivitykset ja lisäykset](#päivitykset-ja-lisäykset)   - [Päivämääräkohtaiset muutokset](#päivämääräkohtaiset-muutokset)     - [2024-10-10](#2024-10-10)     - [2024-10-15](#2024-10-15)     - [2024-10-25](#2024-10-25)     - [2024-10-31](#2024-10-31)     - [2024-11-01](#2024-11-01)     - [2024-11-13](#2024-11-13)     - [2024-11-19](#2024-11-19)     - [2024-11-26](#2024-11-26)     - [2024-12-04](#2024-12-04)     - [2024-12-16](#2024-12-16)     - [2024-12-18](#2024-12-18)     - [2025-01-08](#2025-01-08)     - [2025-01-17](#2025-01-17)     - [Global.css](#globalcss)",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,10 +14,10 @@
     "@vercel/speed-insights": "^1.2.0",
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.13.2"
+    "mongoose": "^8.14.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

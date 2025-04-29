@@ -1,7 +1,7 @@
 // Kirjaudu sisään
 const loginUser = async (credentials) => {
     try {
-        const response = await fetch('/api/auth/login', {
+        const response = await fetch('https://school-team-project.vercel.app/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -24,7 +24,7 @@ const loginUser = async (credentials) => {
 // Rekisteröidy
 const registerUser = async (userData) => {
     try {
-        const response = await fetch('/api/auth/register', {
+        const response = await fetch('https://school-team-project.vercel.app/api/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ const registerUser = async (userData) => {
 // Palauta salasana
 const resetPassword = async (email) => {
     try {
-        const response = await fetch('/api/auth/reset-password', {
+        const response = await fetch('https://school-team-project.vercel.app/api/auth/reset-password', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
