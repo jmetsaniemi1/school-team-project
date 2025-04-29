@@ -13,13 +13,18 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'https://school-team-project.vercel.app'
-    // → lisää preview-URLit tänne, jos haluat
+    // Lisää preview-URLit tänne, jos haluat
   ]
 }));
 
-// JSON-bodyt ja staattiset hakemistot
+// JSON-bodyt
 app.use(express.json());
+
+// Staattiset hakemistot
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/pages', express.static(path.join(__dirname, 'pages')));
+app.use('/resources', express.static(path.join(__dirname, 'resources')));
+app.use('/global', express.static(path.join(__dirname, 'global')));
 
 // Yhdistä MongoDB: vain kerran per cold start
 app.use(async (req, res, next) => {
@@ -43,12 +48,12 @@ app.get('/test', (req, res) => {
   res.send('Testi toimii!');
 });
 
-// Catch-all (kaaosta välttävä regex, ei 'string)
+// Catch-all (regex, ei string)
 app.get(/.*/, (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'public/index.html'));
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
 });
 
-// Express‐error handler
+// Express-error handler
 app.use((err, req, res, next) => {
   console.error('[Vercel] Virhe:', err.stack);
   res.status(500).json({ message: err.message || 'Jotain meni pieleen!' });
@@ -56,5 +61,6 @@ app.use((err, req, res, next) => {
 
 // Exportataan app (EI app.listen)
 module.exports = app;
+
 
 
