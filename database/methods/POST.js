@@ -61,22 +61,47 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    console.log('[Vercel] Login attempt:', { email: req.body.email });
+    console.log('[Vercel Debug] Login attempt with body:', req.body);
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      console.log('[Vercel Debug] Missing email or password');
+      return res.status(400).json({ error: 'Sähköposti ja salasana vaaditaan' });
+    }
+
+    console.log('[Vercel Debug] Searching for user with email:', email);
     // Etsi käyttäjä sähköpostilla
     const user = await User.findOne({ email });
+    
     if (!user) {
+      console.log('[Vercel Debug] User not found with email:', email);
       return res.status(401).json({ error: 'Virheellinen sähköposti tai salasana' });
     }
 
+    console.log('[Vercel Debug] User found:', { 
+      id: user._id, 
+      email: user.email,
+      hasPassword: !!user.password 
+    });
+
     // Tarkista salasana
+    console.log('[Vercel Debug] Comparing passwords...');
     const isMatch = await bcrypt.compare(password, user.password);
+    console.log('[Vercel Debug] Password match result:', isMatch);
+
     if (!isMatch) {
+      console.log('[Vercel Debug] Password does not match');
       return res.status(401).json({ error: 'Virheellinen sähköposti tai salasana' });
+    }
+
+    // Tarkista että JWT_SECRET on määritelty
+    if (!process.env.JWT_SECRET) {
+      console.error('[Vercel Debug] JWT_SECRET is not defined!');
+      return res.status(500).json({ error: 'Sisäinen palvelinvirhe' });
     }
 
     // Luo JWT token
+    console.log('[Vercel Debug] Creating JWT token...');
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET,
@@ -87,7 +112,12 @@ const loginUser = async (req, res) => {
     user.last_login = new Date();
     await user.save();
 
-    console.log('[Vercel] Login successful:', { userId: user._id, email: user.email });
+    console.log('[Vercel Debug] Login successful:', { 
+      userId: user._id, 
+      email: user.email,
+      tokenCreated: !!token 
+    });
+
     res.json({
       token,
       user: {
@@ -98,8 +128,12 @@ const loginUser = async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('[Vercel] Login error:', { error: err.message, stack: err.stack });
-    res.status(500).json({ error: 'Kirjautuminen epäonnistui' });
+    console.error('[Vercel Debug] Login error:', { 
+      error: err.message, 
+      stack: err.stack,
+      body: req.body 
+    });
+    res.status(500).json({ error: 'Kirjautuminen epäonnistui: ' + err.message });
   }
 };
 
