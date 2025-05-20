@@ -86,10 +86,27 @@ document.addEventListener('DOMContentLoaded', function() {
             // Tallenna token
             localStorage.setItem('token', data.token);
             
+            // Debug: tulosta tokenin payload
+            try {
+                const payload = JSON.parse(atob(data.token.split('.')[1]));
+                console.log('Token payload:', payload);
+                if (payload.role === 'admin') {
+                    console.log('Käyttäjä on admin, ohjataan admin-sivulle');
+                    setTimeout(() => {
+                        window.location.href = '../admin-page/admin.html';
+                    }, 1000);
+                    return;
+                } else {
+                    console.log('Käyttäjä EI ole admin, ohjataan ownPage.html');
+                }
+            } catch (e) {
+                console.log('Tokenin purku epäonnistui:', e);
+            }
+            
             // Näytä onnistumisviesti
             M.toast({html: 'Kirjautuminen onnistui!', classes: 'green'});
             
-            // Ohjaa käyttäjä omalle sivulle
+            // Ohjaa käyttäjä omalle sivulle (vain jos ei admin)
             setTimeout(() => {
                 window.location.href = '../own-page/ownPage.html';
             }, 1000);
