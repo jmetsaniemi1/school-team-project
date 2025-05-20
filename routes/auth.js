@@ -34,7 +34,7 @@ router.post('/login', async (req, res) => {
         // Luodaan JWT token
         console.log('[Auth Debug] Creating JWT token');
         const token = jwt.sign(
-            { userId: user._id, email: user.email },
+            { userId: user._id, email: user.email, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
@@ -94,7 +94,7 @@ router.post('/register', async (req, res) => {
 
         // Luodaan token
         const token = jwt.sign(
-            { userId: user._id, email: user.email },
+            { userId: user._id, email: user.email, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
