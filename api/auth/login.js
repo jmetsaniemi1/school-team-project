@@ -38,7 +38,15 @@ module.exports = async (req, res) => {
         user.last_login = new Date();
         await user.save();
 
-        res.json({ token, username: user.username, role: user.role });
+        res.json({
+            token,
+            user: {
+                id: user._id,
+                email: user.email,
+                username: user.username,
+                role: user.role
+            }
+        });
     } catch (error) {
         console.error('Kirjautumisvirhe:', error);
         res.status(500).json({ message: 'Palvelinvirhe' });
