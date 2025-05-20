@@ -13,10 +13,10 @@ module.exports = async (req, res) => {
         // Yhdistetään tietokantaan
         await connectDB();
 
-        const { username, password } = req.body;
+        const { email, password } = req.body;
         
         // Etsitään käyttäjä
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ message: 'Virheellinen käyttäjätunnus tai salasana' });
         }
@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
 
         // Luodaan JWT token
         const token = jwt.sign(
-            { userId: user._id, username: user.username, role: user.role },
+            { userId: user._id, email: user.email, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
