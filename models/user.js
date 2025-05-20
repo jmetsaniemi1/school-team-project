@@ -12,6 +12,12 @@ const userSchema = new mongoose.Schema({
   registration_date: { type: Date, default: Date.now },
   last_login: Date,
   last_activity: Date,
+  lastVisits: [
+    {
+      page: String,
+      timestamp: Date
+    }
+  ],
   email_verification: { type: Boolean, default: false },
   verification_token: String,
 });

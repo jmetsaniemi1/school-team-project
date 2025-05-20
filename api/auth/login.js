@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
 
         // Luodaan JWT token
         const token = jwt.sign(
-            { userId: user._id, username: user.username },
+            { userId: user._id, username: user.username, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
         user.last_login = new Date();
         await user.save();
 
-        res.json({ token, username: user.username });
+        res.json({ token, username: user.username, role: user.role });
     } catch (error) {
         console.error('Kirjautumisvirhe:', error);
         res.status(500).json({ message: 'Palvelinvirhe' });
