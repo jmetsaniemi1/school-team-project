@@ -4,6 +4,7 @@ const auth = require('./routes_user_auth.js/auth.js');
 const cors = require('cors');
 const { getCurrentUser } = require('../database/methods/GET');
 const { fetchUserData } = require('../database/methods/ownPage/GET');
+const admin = require('../middleware/admin.js');
 
 // PUT operation
 const putUsers = require('../database/methods/PUT');
@@ -39,7 +40,7 @@ router.post('/', auth, postUsers.createUser);
 router.delete('/:id', auth, deleteUsers.deleteUser);
 
 // Hae kaikki käyttäjät
-router.get('/', auth, getUsers.getUsers);
+router.get('/', auth, admin, getUsers.getUsers);
 
 module.exports = router;
 
