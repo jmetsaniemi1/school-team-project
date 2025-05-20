@@ -103,7 +103,7 @@ const loginUser = async (req, res) => {
     // Luo JWT token
     console.log('[Vercel Debug] Creating JWT token...');
     const token = jwt.sign(
-      { userId: user._id },
+      { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
