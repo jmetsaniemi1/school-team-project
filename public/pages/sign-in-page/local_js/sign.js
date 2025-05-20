@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const payload = JSON.parse(atob(data.token.split('.')[1]));
                 console.log('Token payload:', payload);
+                console.log('Kirjautuneen käyttäjän rooli:', payload.role);
                 if (payload.role === 'admin') {
                     console.log('Käyttäjä on admin, ohjataan admin-sivulle');
                     setTimeout(() => {
