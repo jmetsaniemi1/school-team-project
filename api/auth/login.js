@@ -21,6 +21,9 @@ module.exports = async (req, res) => {
             return res.status(401).json({ message: 'Virheellinen käyttäjätunnus tai salasana' });
         }
 
+        console.log('Käyttäjä dokumentti:', user);
+        console.log('Käyttäjän rooli ennen tokenin luontia:', user.role);
+
         // Tarkistetaan salasana
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
@@ -33,6 +36,8 @@ module.exports = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
+        const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+        console.log('Luodun tokenin payload:', payload);
 
         // Päivitetään viimeinen kirjautuminen
         user.last_login = new Date();
