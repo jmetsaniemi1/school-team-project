@@ -48,6 +48,7 @@ router.post('/visits', auth, async (req, res) => {
     try {
         const userId = req.userId;
         const { page, timestamp } = req.body;
+        console.log('TALLENNETAAN VIERAILU:', { userId, page, timestamp });
         if (!page || !timestamp) {
             return res.status(400).json({ error: 'Sivun nimi ja aikaleima vaaditaan' });
         }
@@ -57,6 +58,7 @@ router.post('/visits', auth, async (req, res) => {
         }
         // Lisää uusi vierailu alkuun, pidä max 10 vierailua
         user.lastVisits = [{ page, timestamp: new Date(timestamp) }, ...(user.lastVisits || [])].slice(0, 10);
+        console.log('TALLENNETAAN KÄYTTÄJÄLLE:', user.lastVisits);
         await user.save();
         res.status(200).json({ message: 'Vierailu tallennettu' });
     } catch (error) {

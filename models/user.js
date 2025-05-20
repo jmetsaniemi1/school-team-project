@@ -22,8 +22,6 @@ const userSchema = new mongoose.Schema({
   verification_token: String,
 });
 
-module.exports = mongoose.model("User", userSchema, "users"); // Force collection 'users'
-
-console.log('TALLENNETAAN VIERAILU:', { userId, page, timestamp });
-console.log('TALLENNETAAN KÄYTTÄJÄLLE:', user.lastVisits);
+// Tämä estää OverwriteModelErrorin:
+module.exports = mongoose.models.User || mongoose.model("User", userSchema, "users");
 
