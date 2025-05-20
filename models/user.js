@@ -24,3 +24,6 @@ const userSchema = new mongoose.Schema({
 
 module.exports = mongoose.model("User", userSchema, "users"); // Force collection 'users'
 
+console.log('TALLENNETAAN VIERAILU:', { userId, page, timestamp });
+console.log('TALLENNETAAN KÄYTTÄJÄLLE:', user.lastVisits);
+
