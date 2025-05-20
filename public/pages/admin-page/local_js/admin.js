@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         const activeTokens = await fetchActiveTokens();
         userTableBody.innerHTML = '';
         users.forEach(user => {
-            const isActive = activeTokens.some(t => t.userId === user.id && t.active);
+            const isActive = activeTokens.some(t => t.userId === user._id && t.active);
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${user.username}</td>
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <td>${new Date(user.registration_date).toLocaleDateString('fi-FI')}</td>
                 <td>${isActive ? '<span class="green-text">Kyllä</span>' : '<span class="red-text">Ei</span>'}</td>
                 <td>
-                    <select class="ban-select" data-userid="${user.id}">
+                    <select class="ban-select" data-userid="${user._id}">
                         <option value="">Ei banniä</option>
                         <option value="1h">1 tunti</option>
                         <option value="3h">3 tuntia</option>
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     </select>
                 </td>
                 <td>
-                    <button class="btn red delete-user-btn" data-userid="${user.id}">Poista</button>
+                    <button class="btn red delete-user-btn" data-userid="${user._id}">Poista</button>
                 </td>
             `;
             userTableBody.appendChild(tr);
