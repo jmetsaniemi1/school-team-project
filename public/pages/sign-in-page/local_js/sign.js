@@ -64,6 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             console.log('Yritetään kirjautua:', username);
+            console.log('Käytettävä endpoint:', ENDPOINTS.LOGIN);
+            console.log('Lähetettävä data:', { email: username, password });
             const response = await fetch(ENDPOINTS.LOGIN, {
                 method: 'POST',
                 headers: {
@@ -75,7 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
             });
 
+            console.log('Vastaus status:', response.status);
             const data = await response.json();
+            console.log('Vastaus data:', data);
             
             if (!response.ok) {
                 throw new Error(data.error || 'Kirjautuminen epäonnistui');

@@ -61,61 +61,58 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    console.log('[Vercel Debug] Login attempt with body:', req.body);
+    console.log('[BACKEND] Login attempt with body:', req.body);
     const { email, password } = req.body;
 
     if (!email || !password) {
-      console.log('[Vercel Debug] Missing email or password');
+      console.log('[BACKEND] Missing email or password');
       return res.status(400).json({ error: 'Sähköposti ja salasana vaaditaan' });
     }
 
-    console.log('[Vercel Debug] Searching for user with email:', email);
-    // Etsi käyttäjä sähköpostilla
+    console.log('[BACKEND] Searching for user with email:', email);
     const user = await User.findOne({ email });
+    console.log('[BACKEND] User found:', user);
     
     if (!user) {
-      console.log('[Vercel Debug] User not found with email:', email);
+      console.log('[BACKEND] User not found with email:', email);
       return res.status(401).json({ error: 'Virheellinen sähköposti tai salasana' });
     }
 
-    console.log('[Vercel Debug] User found:', { 
-      id: user._id, 
-      email: user.email,
-      hasPassword: !!user.password 
-    });
+    console.log('[BACKEND] Käyttäjän rooli:', user.role);
 
-    // Tarkista salasana
-    console.log('[Vercel Debug] Comparing passwords...');
     const isMatch = await bcrypt.compare(password, user.password);
-    console.log('[Vercel Debug] Password match result:', isMatch);
+    console.log('[BACKEND] Password match result:', isMatch);
 
     if (!isMatch) {
-      console.log('[Vercel Debug] Password does not match');
+      console.log('[BACKEND] Password does not match');
       return res.status(401).json({ error: 'Virheellinen sähköposti tai salasana' });
     }
 
-    // Tarkista että JWT_SECRET on määritelty
     if (!process.env.JWT_SECRET) {
-      console.error('[Vercel Debug] JWT_SECRET is not defined!');
+      console.error('[BACKEND] JWT_SECRET is not defined!');
       return res.status(500).json({ error: 'Sisäinen palvelinvirhe' });
     }
 
-    // Luo JWT token
-    console.log('[Vercel Debug] Creating JWT token...');
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
+    console.log('[BACKEND] Luotu token:', token);
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    console.log('[BACKEND] Token payload:', payload);
 
-    // Päivitä viimeisin kirjautuminen
     user.last_login = new Date();
     await user.save();
 
-    console.log('[Vercel Debug] Login successful:', { 
-      userId: user._id, 
-      email: user.email,
-      tokenCreated: !!token 
+    console.log('[BACKEND] Login successful, palautetaan token ja käyttäjä:', {
+      token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role
+      }
     });
 
     res.json({
@@ -128,7 +125,7 @@ const loginUser = async (req, res) => {
       }
     });
   } catch (err) {
-    console.error('[Vercel Debug] Login error:', { 
+    console.error('[BACKEND] Login error:', { 
       error: err.message, 
       stack: err.stack,
       body: req.body 
