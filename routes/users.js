@@ -43,6 +43,16 @@ router.delete('/:id', auth, deleteUsers.deleteUser);
 // Hae kaikki käyttäjät
 router.get('/', auth, admin, getUsers.getUsers);
 
+// Hae kaikki käyttäjät (adminille)
+router.get('/all', async (req, res) => {
+    try {
+        const users = await User.find({}, '-password');
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: 'Virhe käyttäjien haussa' });
+    }
+});
+
 // Tallenna käyttäjän vierailu
 router.post('/visits', auth, async (req, res) => {
     try {
