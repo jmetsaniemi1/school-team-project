@@ -141,4 +141,15 @@ router.post('/reset-password', async (req, res) => {
     }
 });
 
+// Hae kaikki käyttäjät (adminille)
+router.get('/all', async (req, res) => {
+    try {
+        // Voit halutessasi tarkistaa tässä, että pyytäjä on admin
+        const users = await User.find({}, '-password'); // Ei palauteta salasanaa
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ message: 'Virhe käyttäjien haussa' });
+    }
+});
+
 module.exports = router; 
