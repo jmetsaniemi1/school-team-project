@@ -20,28 +20,17 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     }
 
-    // Hae aktiiviset tokenit
-    async function fetchActiveTokens() {
-        const token = localStorage.getItem('token');
-        const res = await fetch('/api/users/active-tokens', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        return await res.json(); // oletetaan [{userId: ..., active: true}, ...]
-    }
-
     // Renderöi käyttäjätaulukko
     async function renderUserTable() {
         const users = await fetchUsers();
-        const activeTokens = await fetchActiveTokens();
         userTableBody.innerHTML = '';
         users.forEach(user => {
-            const isActive = activeTokens.some(t => t.userId === user._id && t.active);
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>${user.username}</td>
                 <td>${user.email}</td>
-                <td>${new Date(user.registration_date).toLocaleDateString('fi-FI')}</td>
-                <td>${isActive ? '<span class="green-text">Kyllä</span>' : '<span class="red-text">Ei</span>'}</td>
+                <td>${user.registration_date ? new Date(user.registration_date).toLocaleDateString('fi-FI') : '-'}</td>
+                <td><span class="grey-text">-</span></td>
                 <td>
                     <select class="ban-select" data-userid="${user._id}">
                         <option value="">Ei banniä</option>
