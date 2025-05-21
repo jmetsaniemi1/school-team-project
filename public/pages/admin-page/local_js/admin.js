@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <li><a href="#!" class="ban-action" data-userid="${user._id}" data-duration="1d">Bannaa 1d</a></li>
                         <li><a href="#!" class="ban-action" data-userid="${user._id}" data-duration="1w">Bannaa 1w</a></li>
                         <li><a href="#!" class="ban-action" data-userid="${user._id}" data-duration="1m">Bannaa 1m</a></li>
-                        <li><a href="#!" class="ban-action" data-userid="${user._id}" data-duration="forever">Bannaa ikuisesti</a></li>
+                        <li><a href="#!" class="ban-action" data-userid="${user._id}" data-duration="forever">Bannaa ikuisesti luuseri mwhahahaha</a></li>
                         <li class="divider" tabindex="-1"></li>
                         <li><a href="#!" class="delete-action red-text" data-userid="${user._id}">Poista käyttäjä pysyvästi</a></li>
                     </ul>
