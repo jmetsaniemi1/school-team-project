@@ -31,14 +31,13 @@ document.addEventListener('DOMContentLoaded', async function() {
                 banStatus = 'Bannissa (' + new Date(user.banUntil).toLocaleDateString('fi-FI') + ')';
             }
             tr.innerHTML = `
-                <td>${user.username}</td>
-                <td>${user.email}</td>
-                <td>${user.registration_date ? new Date(user.registration_date).toLocaleDateString('fi-FI') : '-'}</td>
-                <td><span class="grey-text">-</span></td>
-                <td>
-                    ${banStatus}
-                    <br>
-                    <select class="ban-select" data-userid="${user._id}">
+                <td class="compact-cell">${user.username}</td>
+                <td class="compact-cell">${user.email}</td>
+                <td class="compact-cell">${user.registration_date ? new Date(user.registration_date).toLocaleDateString('fi-FI') : '-'}</td>
+                <td class="compact-cell"><span class="grey-text">-</span></td>
+                <td class="compact-cell">
+                    <span style="font-size: 0.95em;">${banStatus}</span><br>
+                    <select class="ban-select" data-userid="${user._id}" style="font-size:0.95em; padding:2px 4px; margin-top:2px;">
                         <option value="">Aseta banni</option>
                         <option value="1h">1 tunti</option>
                         <option value="3h">3 tuntia</option>
@@ -48,8 +47,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                         <option value="forever">Ikuinen</option>
                     </select>
                 </td>
-                <td>
-                    <button class="btn red delete-user-btn" data-userid="${user._id}">Poista</button>
+                <td class="compact-cell">
+                    <button class="btn red delete-user-btn" data-userid="${user._id}" style="font-size:0.95em; padding:2px 8px; min-width:unset;">Poista</button>
                 </td>
             `;
             userTableBody.appendChild(tr);

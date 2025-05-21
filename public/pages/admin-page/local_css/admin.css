@@ -89,3 +89,11 @@ body {
     color: #ff5252 !important;
     font-weight: bold;
 }
+
+.compact-cell {
+    padding: 2px 6px !important;
+    font-size: 0.95em;
+  }
+  #user-table td, #user-table th {
+    padding: 2px 6px !important;
+  }
