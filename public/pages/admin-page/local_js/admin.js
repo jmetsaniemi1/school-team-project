@@ -36,55 +36,52 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <td class="compact-cell">${user.registration_date ? new Date(user.registration_date).toLocaleDateString('fi-FI') : '-'}</td>
                 <td class="compact-cell"><span class="grey-text">-</span></td>
                 <td class="compact-cell">
-                    <span style="font-size: 0.95em;">${banStatus}</span><br>
-                    <select class="ban-select" data-userid="${user._id}" style="font-size:0.95em; padding:2px 4px; margin-top:2px;">
-                        <option value="">Aseta banni</option>
-                        <option value="1h">1 tunti</option>
-                        <option value="3h">3 tuntia</option>
-                        <option value="1d">1 päivä</option>
-                        <option value="1w">1 viikko</option>
-                        <option value="1m">1 kuukausi</option>
-                        <option value="forever">Ikuinen</option>
-                    </select>
+                    <span style="font-size: 0.95em;">${banStatus}</span>
                 </td>
                 <td class="compact-cell">
-                    <button class="btn red delete-user-btn" data-userid="${user._id}" style="font-size:0.95em; padding:2px 8px; min-width:unset;">Poista</button>
+                    <select class="action-select" data-userid="${user._id}" style="font-size:0.95em; padding:2px 4px; min-width:120px;">
+                        <option value="">Toiminnot</option>
+                        <option value="ban-1h">Bannaa 1h</option>
+                        <option value="ban-3h">Bannaa 3h</option>
+                        <option value="ban-1d">Bannaa 1d</option>
+                        <option value="ban-1w">Bannaa 1w</option>
+                        <option value="ban-1m">Bannaa 1m</option>
+                        <option value="ban-forever">Bannaa ikuisesti</option>
+                        <option value="delete">Poista käyttäjä pysyvästi</option>
+                    </select>
                 </td>
             `;
             userTableBody.appendChild(tr);
         });
 
-        // Bannaus
-        document.querySelectorAll('.ban-select').forEach(select => {
+        // Toiminnot-dropdown
+        document.querySelectorAll('.action-select').forEach(select => {
             select.addEventListener('change', async function() {
                 const userId = this.dataset.userid;
-                const banValue = this.value;
-                if (banValue) {
+                const value = this.value;
+                if (value.startsWith('ban-')) {
+                    const duration = value.replace('ban-', '');
                     await fetch(`/api/users/ban/${userId}`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${localStorage.getItem('token')}`,
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ duration: banValue })
+                        body: JSON.stringify({ duration })
                     });
                     M.toast({html: 'Banni asetettu!', classes: 'green'});
-                }
-            });
-        });
-
-        // Poisto
-        document.querySelectorAll('.delete-user-btn').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const userId = this.dataset.userid;
-                if (confirm('Haluatko varmasti poistaa käyttäjän?')) {
-                    await fetch(`/api/users/delete/${userId}`, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-                    });
-                    M.toast({html: 'Käyttäjä poistettu!', classes: 'green'});
                     renderUserTable();
+                } else if (value === 'delete') {
+                    if (confirm('Haluatko varmasti poistaa käyttäjän pysyvästi?')) {
+                        await fetch(`/api/users/delete/${userId}`, {
+                            method: 'DELETE',
+                            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                        });
+                        M.toast({html: 'Käyttäjä poistettu pysyvästi!', classes: 'green'});
+                        renderUserTable();
+                    }
                 }
+                this.value = '';
             });
         });
     }
