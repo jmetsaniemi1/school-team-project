@@ -3,11 +3,21 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // Hae kaikki käyttäjät
     async function fetchUsers() {
-        const token = localStorage.getItem('token');
-        const res = await fetch('/api/users/all', {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        return await res.json();
+        try {
+            const token = localStorage.getItem('token');
+            console.log("Token localStoragessa:", token);
+            if (!token) {
+                alert("Kirjaudu ensin sisään!");
+                return [];
+            }
+            const res = await fetch('/api/users/all', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            return await res.json();
+        } catch (err) {
+            console.error("Virhe käyttäjien haussa:", err);
+            return [];
+        }
     }
 
     // Hae aktiiviset tokenit
