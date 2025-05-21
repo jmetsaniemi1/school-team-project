@@ -77,6 +77,47 @@ router.post('/visits', auth, async (req, res) => {
     }
 });
 
+// Bannaa käyttäjä
+router.post('/ban/:userId', async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { duration } = req.body;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Käyttäjää ei löydy' });
+        }
+        let banUntil = null;
+        const now = new Date();
+        switch (duration) {
+            case '1h':
+                banUntil = new Date(now.getTime() + 1 * 60 * 60 * 1000);
+                break;
+            case '3h':
+                banUntil = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+                break;
+            case '1d':
+                banUntil = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                break;
+            case '1w':
+                banUntil = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+                break;
+            case '1m':
+                banUntil = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+                break;
+            case 'forever':
+                banUntil = new Date('2999-12-31T23:59:59.999Z');
+                break;
+            default:
+                banUntil = null;
+        }
+        user.banUntil = banUntil;
+        await user.save();
+        res.json({ message: 'Banni asetettu', banUntil });
+    } catch (error) {
+        res.status(500).json({ message: 'Bannin asettaminen epäonnistui' });
+    }
+});
+
 module.exports = router;
 
 

@@ -26,11 +26,16 @@ document.addEventListener('DOMContentLoaded', async function() {
         userTableBody.innerHTML = '';
         users.forEach(user => {
             const tr = document.createElement('tr');
+            let banStatus = 'Ei banniä';
+            if (user.banUntil && new Date(user.banUntil) > new Date()) {
+                banStatus = 'Bannissa (' + new Date(user.banUntil).toLocaleDateString('fi-FI') + ')';
+            }
             tr.innerHTML = `
                 <td>${user.username}</td>
                 <td>${user.email}</td>
                 <td>${user.registration_date ? new Date(user.registration_date).toLocaleDateString('fi-FI') : '-'}</td>
                 <td><span class="grey-text">-</span></td>
+                <td>${banStatus}</td>
                 <td>
                     <select class="ban-select" data-userid="${user._id}">
                         <option value="">Ei banniä</option>
