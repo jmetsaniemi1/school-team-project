@@ -35,10 +35,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                 <td>${user.email}</td>
                 <td>${user.registration_date ? new Date(user.registration_date).toLocaleDateString('fi-FI') : '-'}</td>
                 <td><span class="grey-text">-</span></td>
-                <td>${banStatus}</td>
                 <td>
+                    ${banStatus}
+                    <br>
                     <select class="ban-select" data-userid="${user._id}">
-                        <option value="">Ei banniä</option>
+                        <option value="">Aseta banni</option>
                         <option value="1h">1 tunti</option>
                         <option value="3h">3 tuntia</option>
                         <option value="1d">1 päivä</option>
